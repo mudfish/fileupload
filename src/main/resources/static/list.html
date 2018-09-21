@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>文件列表</title>
+
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="bootstrap-table/bootstrap-table.js"></script>
+<script src="bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="bootstrap-table/bootstrap-table.css">
+
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	ajaxGet();
+	
+	// DO GET
+	function ajaxGet(){
+		$.ajax({
+			type : "GET",
+			url : "/listAll",
+			success: function(data){
+				//alert(JSON.stringify(data))
+				$.each(data, function(i, file){
+					var fileRow = '<tr>' +
+										'<td>' + file.realFileName + '</td>' +
+										'<td>' + file.fileSize + '</td>' +
+										'<td>' + file.filePath + '</td>' +
+										'<td><a href=\'javascript:removeFile('+file.id+')\'>删除</a></td>' +
+									  '</tr>';
+					
+					$('#fileTable tbody').append(fileRow);
+					
+		        });
+				
+				$( "#fileTable tbody tr:odd" ).addClass("info");
+				$( "#fileTable tbody tr:even" ).addClass("success");
+			},
+			error : function(e) {
+				alert("ERROR: ", e);
+				console.log("ERROR: ", e);
+			}
+		});	
+	}
+	
+	window.removeFile = function(id){
+		$.ajax({
+			type:"POST",
+			url:"/removeFile",
+			traditional:true,
+			data:{id:id},
+			success:function(data){
+				window.location.reload();
+			},
+			error : function(e) {
+				alert("ERROR: ", e);
+				console.log("ERROR: ", e);
+			}
+		});
+	}
+})
+</script>
+</head>
+<body>
+	<div class="container">
+	<h1>文件列表</h1>
+		<div class="row col-md-12 table-responsive">
+			<table id="fileTable" class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>文件名</th>
+						<th>大小</th>
+						<th>路径</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>
