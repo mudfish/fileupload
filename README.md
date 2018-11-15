@@ -3,7 +3,7 @@
 
 ## 配置自定义上传路径
 在application.properties中修改
-file.upload-dir=指定路径（例如：D:\\upload, /opt/upload）
+file.upload-dir=指定路径（例如：D:/upload, /opt/upload）
 
 ## 启动项目
 右击FileUploadApplication.java--->RUN AS--->Java Application
